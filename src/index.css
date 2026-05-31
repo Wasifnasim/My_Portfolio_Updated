@@ -1,0 +1,191 @@
+/* ================================================================
+   src/index.css  —  Global styles & CSS variables
+   ================================================================
+   CHANGE THEME COLORS HERE — all colors are defined as CSS variables.
+   Changing them here will update the entire site automatically.
+   ================================================================ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* ---- Background colors ---------------------------------------- */
+  --bg: #07050f;          /* CHANGE: main page background */
+  --surface: #100c1e;     /* CHANGE: card background */
+  --surface2: #17112b;    /* CHANGE: hovered card background */
+
+  /* ---- Border --------------------------------------------------- */
+  --border: rgba(138, 100, 255, 0.18); /* CHANGE: card/nav borders */
+
+  /* ---- Accent colors -------------------------------------------- */
+  --purple: #8a64ff;          /* CHANGE: main accent color */
+  --purple-soft: #b99fff;     /* CHANGE: lighter version of accent */
+  --purple-dim: rgba(138, 100, 255, 0.12); /* CHANGE: translucent accent bg */
+  --gold: #f0c060;            /* CHANGE: secondary highlight color */
+
+  /* ---- Text colors ---------------------------------------------- */
+  --text: #ede9ff;    /* CHANGE: primary text color */
+  --muted: #7a709a;   /* CHANGE: secondary/muted text color */
+
+  /* ---- Glow shadow ---------------------------------------------- */
+  --glow: 0 0 32px rgba(138, 100, 255, 0.25); /* CHANGE: card hover glow */
+}
+
+/* ================================================================
+   BASE RESETS
+   ================================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  cursor: none; /* Custom cursor is used — see CustomCursor.tsx */
+}
+
+/* ================================================================
+   SCROLLBAR STYLING
+   ================================================================ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb {
+  background: var(--purple);
+  border-radius: 3px;
+}
+
+/* ================================================================
+   NOISE OVERLAY — subtle grain texture over entire page
+   CHANGE: Set opacity to 0 to remove grain effect
+   ================================================================ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9990;
+  opacity: 0.4; /* CHANGE: grain intensity (0 to remove, 1 for heavy) */
+}
+
+/* ================================================================
+   BACKGROUND GRID
+   CHANGE: Adjust background-size to change grid density
+   ================================================================ */
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(138, 100, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(138, 100, 255, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px; /* CHANGE: grid cell size */
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+}
+
+/* ================================================================
+   FLOATING ORB BACKGROUNDS
+   CHANGE: Color values in radial-gradient to adjust glow color
+   ================================================================ */
+.bg-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.18; /* CHANGE: orb visibility (0–1) */
+}
+.bg-orb-1 {
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, #8a64ff, transparent); /* CHANGE: orb color */
+  top: -200px; left: -150px;
+  animation: floatOrb 18s ease-in-out infinite;
+}
+.bg-orb-2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, #5030cc, transparent); /* CHANGE: orb color */
+  bottom: 0; right: -100px;
+  animation: floatOrb 22s ease-in-out infinite reverse;
+}
+@keyframes floatOrb {
+  0%, 100% { transform: translate(0, 0); }
+  50%       { transform: translate(30px, 40px); }
+}
+
+/* ================================================================
+   SCROLL REVEAL ANIMATION
+   ================================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ================================================================
+   SECTION DIVIDER
+   ================================================================ */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* ================================================================
+   PAGE SECTION BASE STYLES
+   ================================================================ */
+.page-section {
+  padding: 6rem 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* ================================================================
+   TYPEWRITER CURSOR BLINK
+   ================================================================ */
+.typewriter-cursor {
+  border-right: 2px solid var(--gold);
+  animation: blink 0.8s step-end infinite;
+}
+@keyframes blink {
+  50% { border-color: transparent; }
+}
+
+/* ================================================================
+   SPINNING CONIC GRADIENT (avatar orb ring)
+   ================================================================ */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ================================================================
+   FLOATING STAT BADGES
+   ================================================================ */
+@keyframes floatBadge {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+/* ================================================================
+   ABOUT — Info cards column
+   ================================================================ */
+.about-info-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}

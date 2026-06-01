@@ -15,7 +15,7 @@ const notableCards = [
     org: "Tata Group",
     year: "2024",
     description: "Completed enterprise-level data visualisation simulation — empowering business with effective insights.",
-    image: "/img/certifications/tata.jpg",
+    image: "/img/certifications/tata.pdf",
   },
   {
     icon: "🔍",
@@ -23,7 +23,7 @@ const notableCards = [
     org: "Deloitte Australia",
     year: "2024",
     description: "Solved real-world analytics problems in a professional consulting job simulation.",
-    image: "/img/certifications/deloitte.jpg",
+    image: "/img/certifications/deloitte.pdf",
   },
   {
     icon: "🗄️",
@@ -31,7 +31,7 @@ const notableCards = [
     org: "GeeksforGeeks",
     year: "2024",
     description: "Completed structured SQL skill-building program covering joins, subqueries, and optimization.",
-    image: "/img/certifications/sql.jpg",
+    image: "/img/certifications/sql.pdf",
   },
   {
     icon: "🐍",
@@ -39,7 +39,7 @@ const notableCards = [
     org: "Skill Up",
     year: "2024",
     description: "Completed Python for Data Science certification covering pandas, numpy, and visualization.",
-    image: "/img/certifications/python.jpg",
+    image: "/img/certifications/python.pdf",
   },
 ]
 
@@ -237,22 +237,32 @@ export default function Certifications() {
                 padding: '1rem',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 minHeight: 320,
+                position: 'relative',
               }}>
-                <div style={{
-                  width: '100%', height: '100%',
-                  backgroundImage: `url(${selectedCert.image})`,
-                  backgroundSize: 'contain',
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat',
-                  opacity: selectedCert.image.includes('jpg') ? 0.3 : 1, // subtle opacity logic if image doesn't exist yet
-                }} />
-                {/* Fallback text if no image yet */}
+                {selectedCert.image.endsWith('.pdf') ? (
+                  <iframe
+                    src={selectedCert.image}
+                    title={selectedCert.title}
+                    style={{ width: '100%', height: '100%', minHeight: '400px', border: 'none', borderRadius: '8px', zIndex: 2 }}
+                  />
+                ) : (
+                  <div style={{
+                    width: '100%', height: '100%', minHeight: '320px',
+                    backgroundImage: `url(${selectedCert.image})`,
+                    backgroundSize: 'contain',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                    opacity: 1,
+                    zIndex: 2,
+                  }} />
+                )}
+                {/* Fallback text if no file exists yet (behind the iframe/image) */}
                 <div style={{
                   position: 'absolute', color: 'var(--muted)',
                   fontFamily: '"DM Mono", monospace', fontSize: '0.8rem',
-                  pointerEvents: 'none',
+                  pointerEvents: 'none', zIndex: 1,
                 }}>
-                  Upload your certificate image here
+                  Upload your certificate here
                 </div>
               </div>
 

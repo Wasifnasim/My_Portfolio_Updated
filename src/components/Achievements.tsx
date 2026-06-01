@@ -42,6 +42,7 @@ const achievements = [
       "/img/achievements/codeflux1.jpeg",
       "/img/achievements/codeflux2.jpeg",
       "/img/achievements/codeflux3.jpeg",
+      "/img/achievements/codeflux4.jpeg",
     ],
     placeholderGradient: "linear-gradient(135deg, #070d1f 0%, #0d2654 50%, #070d1f 100%)",
     description:

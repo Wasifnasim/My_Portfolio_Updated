@@ -1,23 +1,18 @@
 // ================================================================
 // src/components/Achievements.tsx
 // ================================================================
-// Matches your site's exact CSS variables, fonts, and card style.
+// Achievement cards with multi-image slideshow support.
+// Each achievement can have an array of images.
 //
-// SETUP (3 steps):
-//   1. Drop this file into src/components/
-//   2. In App.tsx — add import + JSX (see bottom of this file)
-//   3. In Navigation.tsx — add { label: 'Achievements', href: '#achievements' }
-//
-// TO ADD YOUR IMAGES:
-//   - Put photos in /public/img/achievements/  (e.g. award1.jpg)
-//   - Set  image: "/img/achievements/award1.jpg"  in the achievements array
-//   - Leave  image: ""  to show a gradient placeholder
+// TO ADD IMAGES:
+//   - Put photos in /public/img/achievements/
+//   - Add paths to the `images` array for each achievement
 // ================================================================
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 // ================================================================
-// ✅ EDIT: Main featured achievement cards (the stacked section)
+// ✅ EDIT: Main featured achievement cards
 // ================================================================
 const achievements = [
   {
@@ -25,9 +20,12 @@ const achievements = [
     title: "University Ranker #1",
     subtitle: "Rashtrasant Tukadoji Maharaj Nagpur University",
     year: "2025",
-    // CHANGE: set your image path e.g. "/img/achievements/rank1.jpg"
-    image: "",
-    // CHANGE: shown only when image is empty — pick any gradient
+    // CHANGE: Added placeholder paths for your university rank images
+    images: [
+      "/img/achievements/rank1.jpeg",
+      "/img/achievements/rank2.jpeg",
+      "/img/achievements/rank3.jpeg",
+    ],
     placeholderGradient: "linear-gradient(135deg, #0e0a1f 0%, #2a1860 50%, #0e0a1f 100%)",
     description:
       "Recognized for academic excellence with an 8.13 SGPA across all subjects in the B.Tech AI & Data Science program at Anjuman College of Engineering and Technology.",
@@ -39,7 +37,12 @@ const achievements = [
     title: "Co-Founder & Workshop Lead",
     subtitle: "Codeflux Company · Nagpur",
     year: "2025",
-    image: "",
+    // CHANGE: Added your 3 Codeflux workshop images here
+    images: [
+      "/img/achievements/codeflux1.jpeg",
+      "/img/achievements/codeflux2.jpeg",
+      "/img/achievements/codeflux3.jpeg",
+    ],
     placeholderGradient: "linear-gradient(135deg, #070d1f 0%, #0d2654 50%, #070d1f 100%)",
     description:
       "Co-founded Codeflux and led 17+ AI/ML workshops for students, professionals, and non-professionals. Drove analytics, growth strategy, and tech branding for the startup.",
@@ -51,29 +54,227 @@ const achievements = [
     title: "ML Internship",
     subtitle: "NU Intelligence · Nagpur",
     year: "Jan – Feb 2025",
-    image: "",
+    images: [] as string[],
     placeholderGradient: "linear-gradient(135deg, #070f12 0%, #0d3040 50%, #070f12 100%)",
     description:
       "Completed hands-on machine learning internship implementing supervised and unsupervised learning algorithms, data preprocessing pipelines, and real-world model building.",
     tags: ["Machine Learning", "Python", "Data Preprocessing"],
     tagIcons: ["🔬", "🐍", "📊"],
   },
-  // ── ADD MORE FEATURED CARDS HERE ──────────────────────────────
-  // {
-  //   id: 4,
-  //   title: "Your Achievement",
-  //   subtitle: "Organization Name",
-  //   year: "2026",
-  //   image: "/img/achievements/your-photo.jpg",
-  //   placeholderGradient: "linear-gradient(135deg, #1a0e0e 0%, #4a1f1f 50%, #1a0e0e 100%)",
-  //   description: "Describe your achievement here...",
-  //   tags: ["Tag 1", "Tag 2", "Tag 3"],
-  //   tagIcons: ["🏅", "💡", "🔥"],
-  // },
 ]
 
 // ================================================================
-// COMPONENT — no edits needed below unless changing layout/design
+// Image Slideshow Hook (Auto-rotates for the stacked cards)
+// ================================================================
+function useSlideshow(imageCount: number, interval = 3500) {
+  const [currentSlide, setCurrentSlide] = useState(0)
+
+  useEffect(() => {
+    if (imageCount <= 1) return
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % imageCount)
+    }, interval)
+    return () => clearInterval(timer)
+  }, [imageCount, interval])
+
+  return currentSlide
+}
+
+// ================================================================
+// Auto Slideshow Component (For the stacked cards on the left)
+// ================================================================
+function AutoImageSlideshow({ images, placeholderGradient }: {
+  images: string[]
+  placeholderGradient: string
+}) {
+  const currentSlide = useSlideshow(images.length)
+
+  if (images.length === 0) {
+    return (
+      <div style={{
+        position: 'absolute', inset: 0,
+        background: placeholderGradient,
+      }} />
+    )
+  }
+
+  return (
+    <>
+      {images.map((img, i) => (
+        <div
+          key={img}
+          style={{
+            position: 'absolute', inset: 0,
+            backgroundImage: `url(${img})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: i === currentSlide ? 1 : 0,
+            transition: 'opacity 0.9s ease-in-out',
+            zIndex: i === currentSlide ? 1 : 0,
+          }}
+        />
+      ))}
+
+      {/* Slide indicator dots */}
+      {images.length > 1 && (
+        <div style={{
+          position: 'absolute', bottom: 70, left: '50%', transform: 'translateX(-50%)',
+          display: 'flex', gap: '6px', zIndex: 5,
+        }}>
+          {images.map((_, i) => (
+            <div key={i} style={{
+              width: i === currentSlide ? 18 : 6,
+              height: 6,
+              borderRadius: 3,
+              background: i === currentSlide ? 'var(--purple)' : 'rgba(255,255,255,0.35)',
+              transition: 'all 0.4s cubic-bezier(0.34,1.56,0.64,1)',
+              boxShadow: i === currentSlide ? '0 0 8px rgba(138,100,255,0.5)' : 'none',
+            }} />
+          ))}
+        </div>
+      )}
+    </>
+  )
+}
+
+// ================================================================
+// Manual Slideshow Component (For the detail panel on the right)
+// ================================================================
+function ManualImageSlideshow({ images }: { images: string[] }) {
+  const [current, setCurrent] = useState(0)
+  const [showImages, setShowImages] = useState(false)
+
+  // Reset current slide to 0 and hide when images change (user clicks a new card)
+  useEffect(() => {
+    setCurrent(0)
+    setShowImages(false)
+  }, [images])
+
+  if (images.length === 0) return null
+
+  const handleNext = () => setCurrent((prev) => (prev + 1) % images.length)
+  const handlePrev = () => setCurrent((prev) => (prev - 1 + images.length) % images.length)
+
+  if (!showImages) {
+    return (
+      <div style={{ marginBottom: '2rem' }}>
+        <button 
+          onClick={() => setShowImages(true)} 
+          style={{
+            padding: '0.6rem 1.2rem', borderRadius: 8, border: '1px solid rgba(138,100,255,0.4)',
+            background: 'var(--purple-dim)', color: 'var(--purple-soft)',
+            fontFamily: '"DM Mono", monospace', fontSize: '0.75rem', cursor: 'pointer',
+            letterSpacing: '0.05em', transition: 'all 0.3s ease',
+            display: 'flex', alignItems: 'center', gap: '0.5rem'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'var(--purple)'
+            e.currentTarget.style.color = '#fff'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'var(--purple-dim)'
+            e.currentTarget.style.color = 'var(--purple-soft)'
+          }}
+        >
+          📷 View Event Gallery ({images.length} photos)
+        </button>
+      </div>
+    )
+  }
+
+  return (
+    <div style={{
+      position: 'relative',
+      width: '100%',
+      maxWidth: '380px',
+      height: 160,
+      borderRadius: 12,
+      overflow: 'hidden',
+      marginBottom: '2rem',
+      border: '1px solid var(--border)',
+      background: 'var(--surface)',
+    }}>
+      {images.map((img, i) => (
+        <div key={img} style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: `url(${img})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: i === current ? 1 : 0,
+          transition: 'opacity 0.5s ease-in-out',
+        }} />
+      ))}
+
+      {/* Image counter badge */}
+      {images.length > 1 && (
+        <div style={{
+          position: 'absolute', top: 10, right: 10,
+          background: 'rgba(7,5,15,0.8)',
+          backdropFilter: 'blur(8px)',
+          border: '1px solid var(--border)',
+          borderRadius: 20,
+          padding: '0.2rem 0.6rem',
+          fontFamily: '"DM Mono", monospace',
+          fontSize: '0.65rem',
+          color: 'var(--text)',
+          letterSpacing: '0.05em',
+          zIndex: 3,
+        }}>
+          📷 {current + 1} / {images.length}
+        </div>
+      )}
+
+      {/* Navigation Arrows */}
+      {images.length > 1 && (
+        <>
+          <button onClick={handlePrev} aria-label="Previous image" style={{
+            position: 'absolute', top: '50%', left: 10, transform: 'translateY(-50%)',
+            width: 32, height: 32, borderRadius: '50%',
+            background: 'rgba(7,5,15,0.7)', border: '1px solid rgba(255,255,255,0.1)',
+            color: '#fff', fontSize: '1rem', cursor: 'pointer', zIndex: 3,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            backdropFilter: 'blur(4px)',
+          }}>
+            ←
+          </button>
+          <button onClick={handleNext} aria-label="Next image" style={{
+            position: 'absolute', top: '50%', right: 10, transform: 'translateY(-50%)',
+            width: 32, height: 32, borderRadius: '50%',
+            background: 'rgba(7,5,15,0.7)', border: '1px solid rgba(255,255,255,0.1)',
+            color: '#fff', fontSize: '1rem', cursor: 'pointer', zIndex: 3,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            backdropFilter: 'blur(4px)',
+          }}>
+            →
+          </button>
+
+          {/* Slide dots */}
+          <div style={{
+            position: 'absolute', bottom: 10, left: '50%', transform: 'translateX(-50%)',
+            display: 'flex', gap: '5px', zIndex: 3,
+          }}>
+            {images.map((_, i) => (
+              <button key={i} onClick={() => setCurrent(i)} aria-label={`Go to image ${i + 1}`} style={{
+                width: i === current ? 16 : 6,
+                height: 6,
+                borderRadius: 3,
+                border: 'none',
+                padding: 0,
+                cursor: 'pointer',
+                background: i === current ? 'var(--purple)' : 'rgba(255,255,255,0.4)',
+                transition: 'all 0.3s ease',
+                boxShadow: i === current ? '0 0 8px rgba(138,100,255,0.5)' : 'none',
+              }} />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
+// ================================================================
+// MAIN COMPONENT
 // ================================================================
 export default function Achievements() {
   const [activeIdx, setActiveIdx] = useState(0)
@@ -87,7 +288,7 @@ export default function Achievements() {
     >
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
 
-        {/* ── Section Header — matches your SectionLabel + SectionTitle style */}
+        {/* ── Section Header */}
         <div className="reveal" style={{ marginBottom: '4rem' }}>
           <div style={{
             fontFamily: '"DM Mono", monospace',
@@ -125,7 +326,7 @@ export default function Achievements() {
           marginBottom: '5rem',
         }}>
 
-          {/* ── LEFT: Stacked cards */}
+          {/* ── LEFT: Stacked cards with auto slideshow */}
           <div style={{
             position: 'relative',
             height: 400,
@@ -161,7 +362,6 @@ export default function Achievements() {
                     opacity,
                     transform: `translateX(${translateX}px) translateY(${translateY}px) scale(${scale}) rotateZ(${rotateZ}deg)`,
                     transition: 'all 0.55s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                    // matches your site's card border style
                     border: isActive
                       ? '1px solid rgba(138,100,255,0.45)'
                       : '1px solid var(--border)',
@@ -171,35 +371,32 @@ export default function Achievements() {
                     background: 'var(--surface)',
                   }}
                 >
-                  {/* Card image or gradient placeholder */}
-                  <div style={{
-                    position: 'absolute', inset: 0,
-                    // CHANGE: replace with your image — ach.image is set in the achievements array above
-                    background: ach.image
-                      ? `url(${ach.image}) center/cover no-repeat`
-                      : ach.placeholderGradient,
-                  }} />
+                  {/* Auto Slideshow images or gradient placeholder */}
+                  <AutoImageSlideshow
+                    images={ach.images}
+                    placeholderGradient={ach.placeholderGradient}
+                  />
 
                   {/* Dark overlay so text is always readable */}
                   <div style={{
-                    position: 'absolute', inset: 0,
+                    position: 'absolute', inset: 0, zIndex: 2,
                     background: 'linear-gradient(to top, rgba(7,5,15,0.97) 38%, rgba(7,5,15,0.55) 65%, rgba(7,5,15,0.2) 100%)',
                   }} />
 
                   {/* Purple glow accent — top right */}
                   <div style={{
                     position: 'absolute', top: -50, right: -50,
-                    width: 180, height: 180, borderRadius: '50%',
+                    width: 180, height: 180, borderRadius: '50%', zIndex: 3,
                     background: 'radial-gradient(circle, rgba(138,100,255,0.25), transparent 70%)',
                     filter: 'blur(24px)',
                     opacity: isActive ? 1 : 0.4,
                     transition: 'opacity 0.4s',
                   }} />
 
-                  {/* Active card top stripe — matches your purple theme */}
+                  {/* Active card top stripe */}
                   {isActive && (
                     <div style={{
-                      position: 'absolute', top: 0, left: 0, right: 0, height: 2,
+                      position: 'absolute', top: 0, left: 0, right: 0, height: 2, zIndex: 4,
                       background: 'linear-gradient(90deg, transparent, var(--purple), transparent)',
                     }} />
                   )}
@@ -207,9 +404,9 @@ export default function Achievements() {
                   {/* Card bottom content */}
                   <div style={{
                     position: 'absolute', bottom: 0, left: 0, right: 0,
-                    padding: '1.6rem',
+                    padding: '1.6rem', zIndex: 4,
                   }}>
-                    {/* Year badge — matches your skill-tag style */}
+                    {/* Year badge */}
                     <div style={{
                       display: 'inline-block',
                       padding: '0.2rem 0.65rem',
@@ -255,12 +452,12 @@ export default function Achievements() {
             })}
           </div>
 
-          {/* ── RIGHT: Detail panel — animates in on card change */}
+          {/* ── RIGHT: Detail panel */}
           <div
             key={activeIdx}
             style={{ animation: 'achSlideIn 0.45s cubic-bezier(0.34,1.56,0.64,1) both' }}
           >
-            {/* Matches your timeline-period style */}
+            {/* Year */}
             <div style={{
               fontFamily: '"DM Mono", monospace',
               fontSize: '0.72rem',
@@ -283,7 +480,7 @@ export default function Achievements() {
               {active.title}
             </h3>
 
-            {/* Org — matches your timeline-company style */}
+            {/* Org */}
             <div style={{
               fontSize: '0.9rem',
               color: 'var(--purple-soft)',
@@ -293,7 +490,7 @@ export default function Achievements() {
               {active.subtitle}
             </div>
 
-            {/* Purple divider line */}
+            {/* Purple divider */}
             <div style={{
               width: 40, height: 2, borderRadius: 2,
               background: 'linear-gradient(90deg, var(--purple), transparent)',
@@ -310,7 +507,7 @@ export default function Achievements() {
               {active.description}
             </p>
 
-            {/* Tags — matches your skill-tag style exactly */}
+            {/* Tags */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '2.2rem' }}>
               {active.tags.map((tag, j) => (
                 <span key={j} style={{
@@ -330,7 +527,10 @@ export default function Achievements() {
               ))}
             </div>
 
-            {/* Navigation: dots + arrows */}
+            {/* Manual Slideshow Preview (with arrows) moved below tags */}
+            <ManualImageSlideshow images={active.images} />
+
+            {/* Navigation: dots + arrows (for changing achievements) */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
               {achievements.map((_, i) => (
                 <button
@@ -384,7 +584,6 @@ export default function Achievements() {
           </div>
         </div>
 
-
       </div>
 
       {/* Keyframe for detail panel slide-in */}
@@ -397,18 +596,3 @@ export default function Achievements() {
     </section>
   )
 }
-
-// ================================================================
-// HOW TO ADD TO App.tsx:
-// ================================================================
-//
-// 1. Add this import at the top of App.tsx:
-//    import Achievements from './components/Achievements'
-//
-// 2. Add these two lines inside <main> wherever you want it
-//    (e.g. after Certifications):
-//
-//    <div className="divider" />
-//    <Achievements />
-//
-// ================================================================

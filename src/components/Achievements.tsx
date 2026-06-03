@@ -17,23 +17,6 @@ import React, { useState, useEffect } from 'react'
 const achievements = [
   {
     id: 1,
-    title: "University Ranker #1",
-    subtitle: "Rashtrasant Tukadoji Maharaj Nagpur University",
-    year: "2025",
-    // CHANGE: Added placeholder paths for your university rank images
-    images: [
-      "/img/achievements/rank1.jpeg",
-      "/img/achievements/rank2.jpeg",
-      "/img/achievements/rank3.jpeg",
-    ],
-    placeholderGradient: "linear-gradient(135deg, #0e0a1f 0%, #2a1860 50%, #0e0a1f 100%)",
-    description:
-      "Recognized for academic excellence with an 8.13 SGPA across all subjects in the B.Tech AI & Data Science program at Anjuman College of Engineering and Technology.",
-    tags: ["Academic Excellence", "8.13 SGPA", "AI & Data Science"],
-    tagIcons: ["🏆", "⭐", "🎓"],
-  },
-  {
-    id: 2,
     title: "Co-Founder & Workshop Lead",
     subtitle: "Codeflux Company · Nagpur",
     year: "2025",
@@ -50,6 +33,24 @@ const achievements = [
     tags: ["Leadership", "17+ Workshops", "AI/ML Training"],
     tagIcons: ["🌟", "📢", "🤖"],
   },
+  {
+    id: 2,
+    title: "University Ranker #1",
+    subtitle: "Rashtrasant Tukadoji Maharaj Nagpur University",
+    year: "2025",
+    // CHANGE: Added placeholder paths for your university rank images
+    images: [
+      "/img/achievements/rank1.jpeg",
+      "/img/achievements/rank2.jpeg",
+      "/img/achievements/rank3.jpeg",
+    ],
+    placeholderGradient: "linear-gradient(135deg, #0e0a1f 0%, #2a1860 50%, #0e0a1f 100%)",
+    description:
+      "Recognized for academic excellence with an 8.13 SGPA across all subjects in the B.Tech AI & Data Science program at Anjuman College of Engineering and Technology.",
+    tags: ["Academic Excellence", "8.13 SGPA", "AI & Data Science"],
+    tagIcons: ["🏆", "⭐", "🎓"],
+  },
+  
   {
     id: 3,
     title: "ML Internship",

@@ -129,20 +129,6 @@ Open `src/App.tsx` and comment out the section you don't want:
 ```tsx
 {/* <Skills />       */}   ← commented out = hidden
 {/* <div className="divider" /> */}
-```
-
----
-
-## 🌐 Deployment
-
-### Vercel (Recommended — free)
-1. Push code to GitHub
-2. Go to [vercel.com](https://vercel.com) → Import Project
-3. Select your repo → Deploy
-
-### Netlify
-1. Run `npm run build`
-2. Drag the `dist/` folder to [netlify.com/drop](https://netlify.com/drop)
 
 ---
 

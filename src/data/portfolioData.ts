@@ -165,7 +165,7 @@ export const projects = [
       "Analyzed sales data to uncover revenue trends, product performance and customer behavior. Created a compelling Power BI dashboard highlighting top-selling categories, profit contributors and seasonal patterns.",
     tech: ["MySQL", "Power BI", "Data Analysis"],
     // CHANGE: Replace '#' with your actual GitHub repo link
-    link: "https://github.com/Wasifnasim",
+    link: "https://github.com/Wasifnasim/SQL-POWERBI-PROJECT.git",
     ongoing: false,
   },
   {
@@ -175,7 +175,7 @@ export const projects = [
     description:
       "Developed a deterministic decision tree-based behavioral reflection system with structured branching logic and signal-based state tracking.",
     tech: ["Python", "JSON", "Decision Trees"],
-    link: "https://github.com/Wasifnasim",
+    link: "https://github.com/Wasifnasim/DeepThought-Assignment-.git",
     ongoing: false,
   },
   {
@@ -185,7 +185,7 @@ export const projects = [
     description:
       "Simulated a dataset of 500 users for crypto SIP investments. Analyzed user retention, drop-off patterns, and investment behavior. Built a Power BI dashboard to track engagement and growth metrics.",
     tech: ["Python", "Power BI", "Data Simulation"],
-    link: "https://github.com/Wasifnasim",
+    link: "https://github.com/Wasifnasim/crypto-sip-user-behavior-dashboard.git",
     ongoing: false,
   },
   {
@@ -205,7 +205,7 @@ export const projects = [
     description:
       "Collected haircare product data from Blinkit, Zepto, and Swiggy Instamart across 5 Bangalore pin codes. Cleaned and structured raw data to compare pricing, discounts, stock status, and brand availability.",
     tech: ["Web Scraping", "Python", "Data Cleaning", "Pandas"],
-    link: "https://github.com/Wasifnasim",
+    link: "https://github.com/Wasifnasim/Quick-Commerce-Data-Scraping-Analysis.git",
     ongoing: false,
   },
   {
@@ -215,7 +215,7 @@ export const projects = [
     description:
       "Performed exploratory data analysis on financial datasets to uncover stock trends, event impacts, and AI-driven market insights using Python and visualization tools.",
     tech: ["Python", "EDA", "Matplotlib", "Seaborn"],
-    link: "https://github.com/Wasifnasim",
+    link: "https://github.com/Wasifnasim/AI-Financial-Market-Data-Analysis-.git",
     ongoing: false,
   },
   {
@@ -225,7 +225,7 @@ export const projects = [
     description:
       "Built a machine learning-based real-time threat detection system to enhance women's safety by detecting risks and enabling quick alerts.",
     tech: ["Machine Learning", "Real-time Detection", "Python"],
-    link: "https://github.com/Wasifnasim",
+    link: "https://github.com/Wasifnasim/Women_Safety_Aalytical-_System.git",
     ongoing: true, // CHANGE: set to false when project is complete
   },
   {
